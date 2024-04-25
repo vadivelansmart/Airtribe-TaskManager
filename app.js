@@ -6,7 +6,7 @@ const { ValidateTaskInfo } = require('./utils/taskUtils')
 const { STATUS_MESSAGE } = require('./utils/ErrorMessage')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const dataPath = './task.json'
+const dataPath = 'task.json'
 
 
 const getTaskData = () => {
@@ -33,7 +33,7 @@ app.get('/task/:id', (req, res) => {
         const id = req.params.id;
         const filteredTask = taskList.filter((task) => task.id == id);
         if (filteredTask.length === 0) {
-            return res.status(404).send(STATUS_MESSAGE.INVALID_TASK);
+            return res.status(400).send(STATUS_MESSAGE.INVALID_TASK);
         }
         res.status(200).json(filteredTask);
     } catch (error) {
@@ -47,7 +47,7 @@ app.post('/tasks', (req, res) => {
         let modifiedTaskInfo = taskData;
         const isValidate = ValidateTaskInfo(taskInfo);
         if (!isValidate.status) {
-            res.status(200).json(isValidate.message);
+            res.status(400).json(isValidate.message);
         } else {
             taskInfo.id = modifiedTaskInfo.tasks.length + 1;
             modifiedTaskInfo.tasks.push(taskInfo);
@@ -55,7 +55,7 @@ app.post('/tasks', (req, res) => {
                 if (err) {
                     return res.status(500).send(STATUS_MESSAGE.INTERNAL_SERVER);
                 }
-                return res.status(200).json(STATUS_MESSAGE.CREATED_TASK);
+                return res.status(201).json(STATUS_MESSAGE.CREATED_TASK);
             });
         }
     } catch (error) {
@@ -69,7 +69,7 @@ app.delete('/task/:id', (req, res) => {
         const id = req.params.id;
         const isTaskExist = taskList.find(task => task.id == id);
         if (!isTaskExist) {
-            return res.status(404).send(STATUS_MESSAGE.INVALID_TASK);
+            return res.status(400).send(STATUS_MESSAGE.INVALID_TASK);
         }
         const filteredTask = taskList.filter((task) => task.id != id);
         fs.writeFile('task.json', JSON.stringify(filteredTask), (err) => {
