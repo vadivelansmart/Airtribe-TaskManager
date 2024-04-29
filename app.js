@@ -30,7 +30,7 @@ app.get('/tasks', (req, res) => {
 });
 
 
-app.get('/task/:id', (req, res) => {
+app.get('/tasks/:id', (req, res) => {
     try {
         const taskList = taskData.tasks;
         const { id } = req.params;
@@ -64,7 +64,7 @@ app.post('/tasks', (req, res) => {
     }
 
 });
-app.delete('/task/:id', (req, res) => {
+app.delete('/tasks/:id', (req, res) => {
     try {
         let taskList = taskData.tasks;
         const { id } = req.params;
@@ -78,7 +78,7 @@ app.delete('/task/:id', (req, res) => {
         res.status(500).send(STATUS_MESSAGE.INTERNAL_SERVER);
     }
 })
-app.put('/task/:id', (req, res) => {
+app.put('/tasks/:id', (req, res) => {
     try {
         let taskInfo = req.body
         taskInfo.updatedAt = getTime();
