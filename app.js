@@ -33,8 +33,8 @@ app.get('/tasks', (req, res) => {
 app.get('/tasks/:id', (req, res) => {
     try {
         const taskList = taskData.tasks;
-        const { id } = req.params;
-        const filteredTask = taskList.filter((task) => task.id == id);
+        const  id  = Number(req.params.id);
+        const filteredTask = taskList.filter((task) => task.id === id);
         if (filteredTask.length === 0) {
             return res.status(400).send(STATUS_MESSAGE.INVALID_TASK);
         }
@@ -57,7 +57,7 @@ app.post('/tasks', (req, res) => {
             taskInfo.createdAt = time;
             taskInfo.updatedAt = time;
             modifiedTaskInfo.tasks.push(taskInfo);
-            WriteFileAndRespond(res, modifiedTaskInfo, STATUS_MESSAGE.CREATED_TASK, 200);
+            WriteFileAndRespond(res, modifiedTaskInfo, STATUS_MESSAGE.CREATED_TASK, 201);
         }
     } catch (error) {
         return res.status(500).send(STATUS_MESSAGE.INTERNAL_SERVER);
